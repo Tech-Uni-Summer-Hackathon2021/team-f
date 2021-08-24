@@ -1,6 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:task_project/auth/auth.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //Firebase初期化処理
+  await Firebase.initializeApp();
   // 最初に表示するWidget
   runApp(MyTodoApp());
 }
@@ -19,7 +24,7 @@ class MyTodoApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // リスト一覧画面を表示
-      home: TodoListPage(),
+      home: AuthScreen(),
     );
   }
 }
