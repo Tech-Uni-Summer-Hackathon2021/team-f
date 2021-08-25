@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/auth/auth.dart';
+import 'package:task_project/routes/route.dart';
+
+import 'opening_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +27,8 @@ class MyTodoApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       // リスト一覧画面を表示
-      home: AuthScreen(),
+      routes: AppRoutes.define(),
+      home: OpeningView(),
     );
   }
 }

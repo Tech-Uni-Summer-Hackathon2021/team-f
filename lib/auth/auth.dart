@@ -5,7 +5,11 @@ import 'package:flutter/material.dart';
 import '../main.dart';
 
 class AuthScreen extends StatefulWidget {
+  const AuthScreen({Key key}) : super(key: key);
 
+  static MaterialPageRoute get route => MaterialPageRoute(
+        builder: (context) => const AuthScreen(),
+      );
 
   @override
   _AuthScreenState createState() => _AuthScreenState();
@@ -38,7 +42,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('team-f | test'),
+          title: const Text('team-f | '),
         ),
         body: Container(
           child: Column(
