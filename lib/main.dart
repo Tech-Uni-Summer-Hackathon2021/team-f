@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/auth/auth.dart';
 import 'package:task_project/routes/route.dart';
+import 'package:provider/provider.dart';
+import 'package:task_project/widgets/widget.dart';
 
+import 'models/auth_model.dart';
 import 'opening_screen.dart';
 
 void main() async {
@@ -16,7 +19,9 @@ void main() async {
 class MyTodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => AuthModel(),
+      child: MaterialApp(
       // 右上に表示される"debug"ラベルを消す
       debugShowCheckedModeBanner: false,
       // アプリ名
@@ -28,8 +33,8 @@ class MyTodoApp extends StatelessWidget {
       ),
       // リスト一覧画面を表示
       routes: AppRoutes.define(),
-      home: OpeningView(),
-    );
+      home: _LoginCheck(),
+    ));
   }
 }
 
@@ -50,6 +55,7 @@ class _TodoListPageState extends State<TodoListPage> {
       appBar: AppBar(
         title: Text('タスクリスト'),
       ),
+      drawer: drawerMain(context),
       // データを元にListViewを作成
       body: ListView.builder(
         itemCount: todoList.length,
@@ -153,5 +159,18 @@ class _TodoAddPageState extends State<TodoAddPage> {
         ),
       ),
     );
+  }
+}
+
+
+class _LoginCheck extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // ログイン状態に応じて、画面を切り替える
+    //AuthModelで一括管理
+    final bool _loggedIn = context.watch<AuthModel>().loggedIn;
+    return _loggedIn
+        ? TodoListPage()
+        : OpeningView();
   }
 }
