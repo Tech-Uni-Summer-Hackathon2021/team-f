@@ -10,20 +10,6 @@ class OpeningView extends StatefulWidget {
 class OpeningViewState extends State<OpeningView> {
   OpeningViewState();
 
-  String displayName = "";
-
-  @override
-  void initState() {
-    getData();
-  }
-
-  getData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      displayName = prefs.getString('displayName');
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -90,15 +76,6 @@ class OpeningViewState extends State<OpeningView> {
     );
 
     display() {
-      if (displayName != null)
-        return Text(
-          "Welcome back $displayName!",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
-        );
-      else
         return Text(
           "Welcome!",
           style: TextStyle(
