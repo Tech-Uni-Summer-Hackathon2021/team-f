@@ -21,20 +21,28 @@ class AppbarMain extends StatelessWidget with PreferredSizeWidget {
             ? <Widget>[
               StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore
-                .instance.collection("user")
+                .instance.collection('user')
                 .doc(AuthModel().user.uid)
                 .snapshots(),
-            builder: (context, snapshot) {
-              return 
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              return (!snapshot.hasData)
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [CircularProgressIndicator()],
+                      ),
+                    )
+                  : 
                 Padding(
-                  padding: EdgeInsets.only(right: 10.0),
+                  padding: EdgeInsets.only(right: 20.0),
                   child: Stack(
                     alignment: Alignment.centerRight,
                     children: <Widget>[
                       CircleAvatar(
-                        radius: 20,
-                        child: ClipOval(child: Image.network(snapshot.data.get('avatar_image_path').toString(),)),
-                      ),
+                         backgroundImage:
+                        NetworkImage(snapshot.data['avatar_image_path'].toString()),
+                        ),
                       Positioned(
                         right: 0.0,
                         width: 40.0,
