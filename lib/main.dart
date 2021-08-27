@@ -1,11 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:task_project/auth/auth.dart';
 import 'package:task_project/routes/route.dart';
 import 'package:provider/provider.dart';
 import 'package:task_project/screens/Home/home.dart';
-import 'package:task_project/widgets/widget.dart';
-
 import 'models/auth_model.dart';
 import 'opening_screen.dart';
 
