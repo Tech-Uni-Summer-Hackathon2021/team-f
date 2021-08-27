@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:task_project/models/auth_model.dart';
 import '../../routes/route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -149,13 +151,22 @@ class _RegisterViewState extends State<Register> {
         ),
         onPressed: () async {
           try {
-            User user = (await FirebaseAuth.instance
-                .createUserWithEmailAndPassword(
-                    email: _emailController.text,
-                    password: _passwordController.text,)).user;
-            if(user != null){
-              await FirebaseAuth.instance.currentUser.updateProfile(displayName:_usernameController.text);
-
+            User user =
+                (await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: _emailController.text,
+              password: _passwordController.text,
+            ))
+                    .user;
+            if (user != null) {
+              await FirebaseFirestore.instance
+                  .collection('user')
+                  .doc(FirebaseAuth.instance.currentUser.uid)
+                  .set({
+                    "id": AuthModel().user.uid,
+                    "name": _usernameController.text,
+                    "avatar_image_path":
+                        "https://firebasestorage.googleapis.com/v0/b/team-f-c0d08.appspot.com/o/user_icon%2Fdefault.jpeg?alt=media&token=5185a255-4b0a-4130-b3fc-3cf6a375bb75",
+                    "about": ""});
               Navigator.of(context).pushNamed(AppRoutes.home);
             }
           } catch (e) {
