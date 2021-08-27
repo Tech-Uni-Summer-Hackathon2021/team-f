@@ -1,44 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:task_project/models/auth_model.dart';
 import '../opening_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-Widget appBarMain(BuildContext context) {
-  return AppBar(
-    title: Text('タスクリスト'),
-    actions: <Widget>[
-      Padding(
+
+class AppbarMain extends StatelessWidget with PreferredSizeWidget{
+  final Widget title;
+  final bool isAction;
+
+  AppbarMain({
+    this.title,
+    this.isAction,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+        title: title,
+        actions: isAction? <Widget>[
+          Padding(
         padding: EdgeInsets.only(right: 10.0),
         child: Stack(
           alignment: Alignment.centerRight,
           children: <Widget>[
-            _auth.currentUser != null ?
-              CircleAvatar(
-              radius: 20,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/logo.png',
-                ),
-              ),
-            )
-            : CircleAvatar(
-              radius: 20,
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/default.jpeg',
-                ),
-              ),
-            ),
+            _auth.currentUser == null
+                ? CircleAvatar(
+                    radius: 20,
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/logo.png',
+                      ),
+                    ),
+                  )
+                : CircleAvatar(
+                    radius: 20,
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/default.jpeg',
+                      ),
+                    ),
+                  ),
             Positioned(
               right: 0.0,
               width: 40.0,
               height: 40.0,
               child: RawMaterialButton(
                 onPressed: () {
+                  Navigator.of(context).pushNamed("/mypage");
                   print("aaa");
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(builder: (context) => MyPageScreen(title: 'マイページ')));
                 },
                 shape: CircleBorder(),
               ),
@@ -46,8 +56,12 @@ Widget appBarMain(BuildContext context) {
           ],
         ),
       ),
-    ],
-  );
+      ]
+      :null
+    );
+  }
+  @override
+  Size get preferredSize => const Size.fromHeight(55);
 }
 
 Widget drawerMain(BuildContext context) {
@@ -68,13 +82,12 @@ Widget drawerMain(BuildContext context) {
                       actions: [
                         FlatButton(
                           child: Text('ログアウト'),
-                          onPressed: () async {
-                            await _auth.signOut();
-                            Navigator.pushAndRemoveUntil(
+                          onPressed: () {
+                            AuthModel().logout().then((value) =>  Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => OpeningView()),
-                                (_) => false);
+                                (_) => false));
                           },
                         ),
                         FlatButton(

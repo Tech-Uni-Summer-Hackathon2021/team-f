@@ -14,7 +14,7 @@ class _TodoListPageState extends State<TodoListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBarMain(context),
+      appBar: AppbarMain(title: Text("タスクリスト"), isAction: true,),
       drawer: drawerMain(context),
       // データを元にListViewを作成
       body: ListView.builder(
