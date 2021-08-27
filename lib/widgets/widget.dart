@@ -1,11 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/models/auth_model.dart';
 import '../opening_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
-
-class AppbarMain extends StatelessWidget with PreferredSizeWidget{
+class AppbarMain extends StatelessWidget with PreferredSizeWidget {
   final Widget title;
   final bool isAction;
 
@@ -13,53 +11,58 @@ class AppbarMain extends StatelessWidget with PreferredSizeWidget{
     this.title,
     this.isAction,
   });
+  
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
         title: title,
-        actions: isAction? <Widget>[
-          Padding(
-        padding: EdgeInsets.only(right: 10.0),
-        child: Stack(
-          alignment: Alignment.centerRight,
-          children: <Widget>[
-            _auth.currentUser == null
-                ? CircleAvatar(
-                    radius: 20,
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/logo.png',
+        actions: isAction
+            ? <Widget>[
+              StreamBuilder<DocumentSnapshot>(
+            stream: FirebaseFirestore
+                .instance.collection('user')
+                .doc(AuthModel().user.uid)
+                .snapshots(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              return (!snapshot.hasData)
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [CircularProgressIndicator()],
                       ),
-                    ),
-                  )
-                : CircleAvatar(
-                    radius: 20,
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/default.jpeg',
+                    )
+                  : 
+                Padding(
+                  padding: EdgeInsets.only(right: 20.0),
+                  child: Stack(
+                    alignment: Alignment.centerRight,
+                    children: <Widget>[
+                      CircleAvatar(
+                         backgroundImage:
+                        NetworkImage(snapshot.data['avatar_image_path'].toString()),
+                        ),
+                      Positioned(
+                        right: 0.0,
+                        width: 40.0,
+                        height: 40.0,
+                        child: RawMaterialButton(
+                          onPressed: () {
+                            Navigator.of(context).pushNamed("/mypage");
+                            print("aaa");
+                          },
+                          shape: CircleBorder(),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-            Positioned(
-              right: 0.0,
-              width: 40.0,
-              height: 40.0,
-              child: RawMaterialButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamed("/mypage");
-                  print("aaa");
-                },
-                shape: CircleBorder(),
-              ),
-            ),
-          ],
-        ),
-      ),
-      ]
-      :null
-    );
+                );
+            })
+              ]
+            : null);
   }
+
   @override
   Size get preferredSize => const Size.fromHeight(55);
 }
@@ -83,11 +86,12 @@ Widget drawerMain(BuildContext context) {
                         FlatButton(
                           child: Text('ログアウト'),
                           onPressed: () {
-                            AuthModel().logout().then((value) =>  Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => OpeningView()),
-                                (_) => false));
+                            AuthModel().logout().then((value) =>
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => OpeningView()),
+                                    (_) => false));
                           },
                         ),
                         FlatButton(
