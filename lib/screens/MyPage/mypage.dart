@@ -9,7 +9,6 @@ import '../../widgets/profile_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
-import 'package:flutter_native_image/flutter_native_image.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -42,9 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 10),
                         ProfileWidget(
                           imagePath: snapshot.data['avatar_image_path'],
-                          onClicked: () {
-                            showBottomSheet();
-                          },
+                          isEdit: false,
                         ),
                         const SizedBox(height: 22),
                         buildName(snapshot.data['name'], snapshot.data['id']),
@@ -75,7 +72,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget buildUpgradeButton() => ButtonWidget(
         text: 'プロフィール編集',
-        onClicked: () {},
+        onClicked: () {
+          Navigator.of(context).pushNamed("/edit-mypage");
+        },
       );
 
   Widget buildAbout(String about) => Container(
