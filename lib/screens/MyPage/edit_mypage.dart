@@ -2,25 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/models/auth_model.dart';
+import 'package:task_project/widgets/button_widget.dart';
 import 'package:task_project/widgets/widget.dart';
-import '../../widgets/button_widget.dart';
-import '../../widgets/numbers_widget.dart';
 import '../../widgets/profile_widget.dart';
+import '../../widgets/textfield_widget.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'dart:io';
 
-class ProfilePage extends StatefulWidget {
+class EditProfilePage extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _EditProfilePageState createState() => _EditProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _EditProfilePageState extends State<EditProfilePage> {
+  String name, id, about;
   @override
-  Widget build(BuildContext context) {
-    print(AuthModel().user.uid);
-    return Scaffold(
-        appBar: AppbarMain(title: Text("マイページ"), isAction: false),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppbarMain(title: Text("プロフィール編集"), isAction: false),
         body: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('user')
@@ -36,64 +35,74 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     )
                   : ListView(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
                       physics: BouncingScrollPhysics(),
                       children: [
-                        const SizedBox(height: 10),
                         ProfileWidget(
                           imagePath: snapshot.data['avatar_image_path'],
-                          isEdit: false,
+                          isEdit: true,
+                          onClicked: () {
+                            showBottomSheet();
+                          },
                         ),
-                        const SizedBox(height: 22),
-                        buildName(snapshot.data['name'], snapshot.data['id']),
                         const SizedBox(height: 24),
-                        Center(child: buildUpgradeButton()),
+                        TextFieldWidget(
+                          label: 'Full Name',
+                          text: snapshot.data['name'],
+                          onChange: (input) {
+                            setState(() {
+                              name = input;
+                            }); 
+                          },
+                        ),
                         const SizedBox(height: 24),
-                        NumbersWidget(),
+                        TextFieldWidget(
+                          label: 'ID',
+                          text: snapshot.data['id'],
+                          onChange: (input) {
+                            setState(() {
+                              id = input;
+                            }); 
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        TextFieldWidget(
+                          label: 'About',
+                          text: snapshot.data['about'],
+                          maxLines: 5,
+                          onChange: (input) {
+                            setState(() {
+                              about = input;
+                            }); 
+                          },
+                        ),
                         const SizedBox(height: 48),
-                        buildAbout(snapshot.data['about']),
+                        ButtonWidget(
+                          text: '保存',
+                          onClicked: () {
+                            SaveData();
+                            Navigator.pop(context);
+                          },
+                        )
                       ],
                     );
-            }));
+            }),
+      );
+
+  Future<void> SaveData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(AuthModel().user.uid)
+          .update({
+        'name': name,
+        'id': id,
+        'about': about,
+      });
+    } catch (e) {
+      print("Error");
+    }
   }
-
-  Widget buildName(String name, String uid) => Column(
-        children: [
-          Text(
-            name,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            "@" + uid,
-            style: TextStyle(color: Colors.grey),
-          )
-        ],
-      );
-
-  Widget buildUpgradeButton() => ButtonWidget(
-        text: 'プロフィール編集',
-        onClicked: () {
-          Navigator.of(context).pushNamed("/edit-mypage");
-        },
-      );
-
-  Widget buildAbout(String about) => Container(
-        padding: EdgeInsets.symmetric(horizontal: 48),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'About',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              about,
-              style: TextStyle(fontSize: 16, height: 1.4),
-            ),
-          ],
-        ),
-      );
 
   Future<int> showCupertinoBottomBar() {
     //選択するためのボトムシートを表示

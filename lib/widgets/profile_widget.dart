@@ -1,15 +1,18 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 
 class ProfileWidget extends StatelessWidget {
   final String imagePath;
+  final bool wasEdit;
+  final bool isEdit;
   final VoidCallback onClicked;
 
   const ProfileWidget({
     Key key,
     this.imagePath,
+    this.wasEdit = false,
+    this.isEdit,
     this.onClicked,
   }) : super(key: key);
 
@@ -24,7 +27,7 @@ class ProfileWidget extends StatelessWidget {
           Positioned(
             bottom: 0,
             right: 4,
-            child: buildEditIcon(color),
+            child: isEdit ? buildEditIcon(color) : buildImage(),
           ),
         ],
       ),
@@ -55,7 +58,7 @@ class ProfileWidget extends StatelessWidget {
           color: color,
           all: 8,
           child: Icon(
-            Icons.edit,
+            wasEdit ? Icons.add_a_photo : Icons.edit,
             color: Colors.white,
             size: 20,
           ),
