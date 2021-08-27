@@ -17,4 +17,10 @@ class AuthModel extends ChangeNotifier {
 
   User get user => _user;
   bool get loggedIn => _user != null;
+
+  Future<void> logout() async {
+    _user = null;
+    await _auth.signOut();
+    notifyListeners();
+  }
 }
