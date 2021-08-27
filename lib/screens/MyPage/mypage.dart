@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         const SizedBox(height: 10),
                         ProfileWidget(
                           imagePath: snapshot.data['avatar_image_path'],
-                          isEdit: false,
+                          isMypage: true,
                         ),
                         const SizedBox(height: 22),
                         buildName(snapshot.data['name'], snapshot.data['id']),

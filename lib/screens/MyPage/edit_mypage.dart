@@ -41,6 +41,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ProfileWidget(
                           imagePath: snapshot.data['avatar_image_path'],
                           isEdit: true,
+                          isMypage: false,
                           onClicked: () {
                             showBottomSheet();
                           },
