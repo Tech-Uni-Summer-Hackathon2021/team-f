@@ -11,7 +11,6 @@ class AppbarMain extends StatelessWidget with PreferredSizeWidget {
     this.title,
     this.isAction,
   });
-  
 
   @override
   Widget build(BuildContext context) {
@@ -19,46 +18,47 @@ class AppbarMain extends StatelessWidget with PreferredSizeWidget {
         title: title,
         actions: isAction
             ? <Widget>[
-              StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore
-                .instance.collection('user')
-                .doc(AuthModel().user.uid)
-                .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<DocumentSnapshot> snapshot) {
-              return (!snapshot.hasData)
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [CircularProgressIndicator()],
-                      ),
-                    )
-                  : 
-                Padding(
-                  padding: EdgeInsets.only(right: 20.0),
-                  child: Stack(
-                    alignment: Alignment.centerRight,
-                    children: <Widget>[
-                      CircleAvatar(
-                         backgroundImage:
-                        NetworkImage(snapshot.data['avatar_image_path'].toString()),
-                        ),
-                      Positioned(
-                        right: 0.0,
-                        width: 40.0,
-                        height: 40.0,
-                        child: RawMaterialButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed("/mypage");
-                            print("aaa");
-                          },
-                          shape: CircleBorder(),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-            })
+                StreamBuilder<DocumentSnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('user')
+                        .doc(AuthModel().user.uid)
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<DocumentSnapshot> snapshot) {
+                      return (!snapshot.hasData)
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [CircularProgressIndicator()],
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(right: 20.0),
+                              child: Stack(
+                                alignment: Alignment.centerRight,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundImage: NetworkImage(snapshot
+                                        .data['avatar_image_path']
+                                        .toString()),
+                                  ),
+                                  Positioned(
+                                    right: 0.0,
+                                    width: 40.0,
+                                    height: 40.0,
+                                    child: RawMaterialButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed("/mypage");
+                                        print("aaa");
+                                      },
+                                      shape: CircleBorder(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                    })
               ]
             : null);
   }
@@ -73,6 +73,18 @@ Widget drawerMain(BuildContext context) {
       padding: EdgeInsets.zero,
       children: <Widget>[
         DrawerHeader(),
+        ListTile(
+            leading: Icon(Icons.api),
+            title: Text('他のユーザーのタスク'),
+            onTap: () {
+              print("ユーザー");
+            }),
+        ListTile(
+            leading: Icon(Icons.apps),
+            title: Text('よく使うタスク'),
+            onTap: () {
+              print("タスク");
+            }),
         ListTile(
             leading: Icon(Icons.logout),
             title: Text('ログアウト'),
@@ -103,13 +115,13 @@ Widget drawerMain(BuildContext context) {
                       ],
                     );
                   });
-            }),
-        ListTile(
-            leading: Icon(Icons.mail),
-            title: Text('メール'),
-            onTap: () {
-              print("メール");
             })
+        //ListTile(
+        //  leading: Icon(Icons.mail),
+        //title: Text('メール'),
+        //onTap: () {
+        // print("メール");
+        //}),
       ],
     ),
   );

@@ -33,7 +33,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [CircularProgressIndicator()],
                       ),
-                  )
+                    )
                   : ListView(
                       padding: EdgeInsets.symmetric(horizontal: 32),
                       physics: BouncingScrollPhysics(),
@@ -80,18 +80,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         const SizedBox(height: 48),
                         ButtonWidget(
                           text: '保存',
-                          onClicked: () async{
-                            DocumentReference ref = FirebaseFirestore.instance.collection('user').doc(AuthModel().user.uid);
-                            try {
-                              await ref
-                                  .update({
-                                'name': name != null ? name : snapshot.data['name'],
-                                'id': id != null ? id : snapshot.data['id'],
-                                'about': about != null ? about : snapshot.data['about'],
-                              });
-                            } catch (e) {
-                              print("Error");
-                            }
+                          onClicked: () {
+                            SaveData();
                             Navigator.pop(context);
                           },
                         )
@@ -99,6 +89,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     );
             }),
       );
+
+  Future<void> SaveData() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('user')
+          .doc(AuthModel().user.uid)
+          .update({
+        'name': name,
+        'id': id,
+        'about': about,
+      });
+    } catch (e) {
+      print("Error");
+    }
+  }
 
   Future<int> showCupertinoBottomBar() {
     //選択するためのボトムシートを表示
