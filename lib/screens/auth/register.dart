@@ -162,11 +162,12 @@ class _RegisterViewState extends State<Register> {
                   .collection('user')
                   .doc(FirebaseAuth.instance.currentUser.uid)
                   .set({
-                    "id": AuthModel().user.uid,
-                    "name": _usernameController.text,
-                    "avatar_image_path":
-                        "https://firebasestorage.googleapis.com/v0/b/team-f-c0d08.appspot.com/o/user_icon%2Fdefault.jpeg?alt=media&token=5185a255-4b0a-4130-b3fc-3cf6a375bb75",
-                    "about": ""});
+                "id": AuthModel().user.uid,
+                "name": _usernameController.text,
+                "avatar_image_path":
+                    "https://firebasestorage.googleapis.com/v0/b/team-f-c0d08.appspot.com/o/user_icon%2Fdefault.jpeg?alt=media&token=5185a255-4b0a-4130-b3fc-3cf6a375bb75",
+                "about": ""
+              });
               Navigator.of(context).pushNamed(AppRoutes.home);
             }
           } catch (e) {
@@ -216,7 +217,7 @@ class _RegisterViewState extends State<Register> {
     );
 
     return Scaffold(
-      backgroundColor: Color(0xff8c52ff),
+      backgroundColor: Color(0xffd8a6b7),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(

@@ -76,17 +76,17 @@ class OpeningViewState extends State<OpeningView> {
     );
 
     display() {
-        return Text(
-          "Welcome!",
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
-          ),
-        );
+      return Text(
+        "Welcome!",
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 25,
+        ),
+      );
     }
 
     return Scaffold(
-      backgroundColor: Color(0xff8c52ff),
+      backgroundColor: Color(0xffd8a6b7),
       body: Padding(
         padding: EdgeInsets.all(36),
         child: Column(

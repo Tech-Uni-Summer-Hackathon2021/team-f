@@ -55,7 +55,7 @@ class _LoginViewState extends State<Login> {
                       child: Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(25.0),
-                        color: Color(0xff8c52ff),
+                        color: Color(0xffd8a6b7),
                         child: MaterialButton(
                           minWidth: mq.size.width / 2,
                           padding: EdgeInsets.fromLTRB(10.0, 15.0, 10.0, 15.0),
@@ -75,6 +75,7 @@ class _LoginViewState extends State<Login> {
                               Navigator.of(context).pop();
                             } catch (e) {
                               print(e);
+                              // ignore: todo
                               // TODO: Add snackbar reporting error
                             }
                           },
@@ -193,12 +194,11 @@ class _LoginViewState extends State<Login> {
         ),
         onPressed: () async {
           try {
-            User user =
-                (await FirebaseAuth.instance.signInWithEmailAndPassword(
+            User user = (await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: _emailController.text,
               password: _passwordController.text,
             ))
-                    .user;
+                .user;
             if (user != null) {
               SharedPreferences prefs = await SharedPreferences.getInstance();
               prefs.setString('displayName', user.displayName);
@@ -249,7 +249,7 @@ class _LoginViewState extends State<Login> {
     );
 
     return Scaffold(
-      backgroundColor: Color(0xff8c52ff),
+      backgroundColor: Color(0xffd8a6b7),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -273,5 +273,3 @@ class _LoginViewState extends State<Login> {
     );
   }
 }
-
-
