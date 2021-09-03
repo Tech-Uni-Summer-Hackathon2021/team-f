@@ -12,16 +12,14 @@ class TodoListPage extends StatefulWidget {
 class _TodoListPageState extends State<TodoListPage> {
   List todoList = [
     {
-      "title": "aaa",
-      "dl": "",
-      "isExpired": true,
+      'title': 'aaa',
+      'dl': '',
+      'isExpired': true,
     },
-    {"title": "bbb", "dl": "", "isExpired": false},
-    {"title": "ccc", "dl": "", "isExpired": false}
+    {'title': 'bbb', 'dl': '', 'isExpired': false},
+    {'title': 'ccc', 'dl': '', 'isExpired': false},
   ];
   var workingIndex = -1;
-
-  get dl => null;
 
   @override
   Widget build(BuildContext context) {
@@ -92,15 +90,17 @@ class _TodoListPageState extends State<TodoListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final title = await Navigator.of(context).push(
+          final data = await Navigator.of(context).push(
             MaterialPageRoute(builder: (context) {
               return TodoAddPage();
             }),
           );
-          if (title != null) {
+          if (data[0] != null) {
             setState(() {
-              todoList.add({title: 'title', 'dl': '', 'isExpired': false});
+              todoList
+                  .add({'title': data[0], 'dl': 'data[1]', 'isExpired': false});
             });
+            print(data[1]);
           }
         },
         child: Icon(Icons.add),
