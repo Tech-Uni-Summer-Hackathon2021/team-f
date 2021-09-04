@@ -21,7 +21,8 @@ class _TodoListPageState extends State<TodoListPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(getData());
+    getData().then((value) => todoList = value['data']);
+
     return Scaffold(
       backgroundColor: Color(int.parse("0xfff0ffff")),
       appBar: AppbarMain(
@@ -119,6 +120,10 @@ getData() async {
       .doc(AuthModel().user.uid)
       .get()
       .then((value) => value.data());
-  print(x);
+  x = x['data'].forEach((element) {
+    if (element['dbOb'] is Timestamp) {
+      element['dbOb'] = element['dlOb'].toDate();
+    }
+  });
   return x;
 }
