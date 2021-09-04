@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/models/auth_model.dart';
+//import 'package:task_project/screens/Home/list_add_SNS.dart';
 import '../opening_screen.dart';
 
 class AppbarMain extends StatelessWidget with PreferredSizeWidget {
@@ -77,13 +78,8 @@ Widget drawerMain(BuildContext context) {
             leading: Icon(Icons.api),
             title: Text('他のユーザーのタスク'),
             onTap: () {
+              //return TodoSNSPage();
               print("ユーザー");
-            }),
-        ListTile(
-            leading: Icon(Icons.apps),
-            title: Text('よく使うタスク'),
-            onTap: () {
-              print("タスク");
             }),
         ListTile(
             leading: Icon(Icons.logout),
@@ -116,12 +112,6 @@ Widget drawerMain(BuildContext context) {
                     );
                   });
             })
-        //ListTile(
-        //  leading: Icon(Icons.mail),
-        //title: Text('メール'),
-        //onTap: () {
-        // print("メール");
-        //}),
       ],
     ),
   );

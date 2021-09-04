@@ -1,12 +1,10 @@
-# Tech.Uni SummerHack 2021 Template
-
-![Tech.Uni SummerHack](https://user-images.githubusercontent.com/63713624/126744501-639e7f32-0ed9-48ff-91e1-2fdee17d7830.jpg)
-
-
 
 ## プロダクト名
-
+タスク共有アプリ
 ## プロダクト説明
-
+SNS風のタスク共有アプリ！
+現在取り組んでいるタスクや、これから行うタスクをみんなに共有、みんなのモチベーションをあげることができる！
 ## 使用技術
+Flutter　Firebase
 
+![Test Image 3](/image/test.png)
