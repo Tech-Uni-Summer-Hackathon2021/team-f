@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_project/screens/Home/list_add.dart';
 import 'package:task_project/widgets/widget.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:task_project/models/auth_model.dart';
+//import package:task_project/widgets/list_add.dart';
 
 class TodoListPage extends StatefulWidget {
   @override
@@ -10,19 +13,15 @@ class TodoListPage extends StatefulWidget {
 }
 
 class _TodoListPageState extends State<TodoListPage> {
-  List todoList = [
-    {
-      'title': 'aaa',
-      'dl': '',
-      'isExpired': true,
-    },
-    {'title': 'bbb', 'dl': '', 'isExpired': false},
-    {'title': 'ccc', 'dl': '', 'isExpired': false},
-  ];
+  List todoList = [];
   var workingIndex = -1;
+  Map todo;
+  DateTime now = DateTime.now();
+  final _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
+    print(getData());
     return Scaffold(
       backgroundColor: Color(int.parse("0xfff0ffff")),
       appBar: AppbarMain(
@@ -33,6 +32,8 @@ class _TodoListPageState extends State<TodoListPage> {
       body: ListView.builder(
         itemCount: todoList.length,
         itemBuilder: (context, index) {
+          todo = todoList[index];
+          todo['isExpired'] = todo['dlOb'].isBefore(now);
           return Card(
               child: Slidable(
             actionPane: SlidableStrechActionPane(),
@@ -63,18 +64,17 @@ class _TodoListPageState extends State<TodoListPage> {
                 size: 24,
               ),
               title: Text(
-                todoList[index]['title'],
+                todo['title'],
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 20),
               ),
               subtitle: Text(
-                'MM/DD n時ｍｍ分  x Day ${(todoList[index]['isExpired']) ? 'past' : 'left'}',
+                '${todo['dl']}  x Day ${(todo['isExpired']) ? 'past' : 'left'}',
                 textAlign: TextAlign.end,
                 style: TextStyle(
-                  color: (todoList[index]['isExpired'])
-                      ? Colors.pinkAccent
-                      : Colors.black54,
+                  color:
+                      (todo['isExpired']) ? Colors.pinkAccent : Colors.black54,
                 ),
               ),
               onTap: () => setState(() => workingIndex = index),
@@ -95,16 +95,30 @@ class _TodoListPageState extends State<TodoListPage> {
               return TodoAddPage();
             }),
           );
-          if (data[0] != null) {
+          if (data != null) {
+            data['isExpired'] = false;
             setState(() {
-              todoList
-                  .add({'title': data[0], 'dl': 'data[1]', 'isExpired': false});
+              todoList.add(data);
             });
-            print(data[1]);
+
+            var docRef = await _firestore
+                .collection("usersTask")
+                .doc(AuthModel().user.uid)
+                .set({'data': todoList});
           }
         },
         child: Icon(Icons.add),
       ),
     );
   }
+}
+
+getData() async {
+  var x = await FirebaseFirestore.instance
+      .collection("usersTask")
+      .doc(AuthModel().user.uid)
+      .get()
+      .then((value) => value.data());
+  print(x);
+  return x;
 }
